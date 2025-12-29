@@ -46,13 +46,13 @@
 
         textarea {
             width: 100%;
-            height: 150px;
+            height: 180px;
             padding: 12px;
             border: 2px solid #e2e8f0;
             border-radius: 8px;
             font-family: inherit;
             resize: none;
-            font-size: 16px; /* يمنع الزووم في الايفون */
+            font-size: 16px;
         }
         textarea:focus { border-color: var(--secondary); outline: none; }
 
@@ -87,17 +87,15 @@
             align-items: flex-start;
         }
 
-        /* Invoice Paper Style */
         .invoice-paper {
             background: #fff;
             width: var(--paper-w);
             min-height: var(--paper-h);
-            padding: 20mm;
+            padding: 15mm; 
             position: relative;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             display: flex;
             flex-direction: column;
-            /* هام جداً: هذا الكلاس سيتم تعديله في الموبايل */
         }
 
         .watermark {
@@ -106,7 +104,7 @@
             transform: translate(-50%, -50%) rotate(-45deg);
             font-size: 5rem;
             color: #000;
-            opacity: 0.03;
+            opacity: 0.1;
             font-weight: 900;
             white-space: nowrap;
             pointer-events: none;
@@ -115,111 +113,122 @@
             border-radius: 20px;
         }
 
-        /* Header Layout */
         header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             border-bottom: 3px solid var(--primary);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
         }
 
-        .brand-info { display: flex; flex-direction: column; gap: 5px; }
-        .brand-info h1 { margin: 0; color: var(--primary); font-size: 1.8rem; }
-        .brand-info p { margin: 0; color: #64748b; font-size: 0.9rem; }
+        .brand-info h1 { margin: 0; color: var(--primary); font-size: 1.6rem; }
+        .brand-info p { margin: 2px 0; color: #64748b; font-size: 0.85rem; }
 
         .logo-box {
-            width: 150px;
-            height: 100px;
+            width: 140px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: flex-end;
         }
         .logo-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        /* Meta Data */
         .meta-data {
             display: flex;
             gap: 20px;
             background: #f1f5f9;
-            padding: 15px;
+            padding: 10px 15px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .meta-item { display: flex; flex-direction: column; }
-        .meta-label { font-size: 0.8rem; color: #64748b; }
-        .meta-val { font-weight: bold; font-size: 1.1rem; }
+        .meta-label { font-size: 0.75rem; color: #64748b; }
+        .meta-val { font-weight: bold; font-size: 1rem; }
 
-        /* Body Content */
         .inv-body {
             flex: 1;
             font-size: 1.1rem;
-            line-height: 1.8;
+            line-height: 1.7;
             white-space: pre-wrap;
             color: #334155;
+            padding: 10px 0;
         }
 
-        /* Footer */
         footer {
-            margin-top: 40px;
-            padding-top: 20px;
+            margin-top: 10px;
+            padding-top: 10px;
             border-top: 1px solid #e2e8f0;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
-        .qr-img { width: 100px; height: 100px; border: 1px solid #ddd; }
 
-        /* --- MOBILE TWEAKS (The Fix) --- */
-        @media (max-width: 768px) {
-            body { flex-direction: column; height: auto; overflow-y: auto; }
-            
-            .sidebar {
-                width: 100%;
-                height: auto;
-                border-left: none;
-                border-bottom: 1px solid #ddd;
-                padding: 15px;
-                position: relative;
-            }
-
-            .preview-area {
-                padding: 10px;
-                background: #f8fafc; /* خلفية فاتحة للموبايل */
-                align-items: flex-start;
-                height: auto;
-            }
-
-            .invoice-paper {
-                /* تحويل الورقة لتناسب عرض الموبايل */
-                width: 100%; 
-                min-height: auto; /* ارتفاع تلقائي */
-                padding: 20px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-                border-radius: 8px;
-            }
-
-            /* تعديلات داخلية للفاتورة في الموبايل */
-            header { flex-direction: column-reverse; gap: 15px; text-align: center; align-items: center; }
-            .logo-box { justify-content: center; margin-bottom: 10px; }
-            .meta-data { justify-content: space-between; }
-            footer { flex-direction: column; gap: 20px; text-align: center; }
-            
-            .watermark { font-size: 2.5rem; padding: 10px 20px; opacity: 0.05;}
-            
-            textarea { height: 120px; }
+        .footer-text-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
         }
 
-        /* --- Print & Capture Styles --- */
+        .footer-note {
+            font-size: 0.85rem;
+            color: #1e3a8a;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .footer-sub {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin: 0;
+        }
+        
+        .qr-img { 
+            width: 70px; 
+            height: 70px; 
+            border: 1px solid #eee;
+            padding: 2px;
+            background: #fff;
+        }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; height: auto; overflow-y: auto; }
+            .sidebar { width: 100%; height: auto; border-left: none; border-bottom: 1px solid #ddd; padding: 15px; }
+            .preview-area { padding: 10px; background: #f8fafc; height: auto; }
+            .invoice-paper { width: 100%; min-height: auto; padding: 15px; }
+            header { flex-direction: column-reverse; text-align: center; align-items: center; }
+            .logo-box { justify-content: center; }
+            footer { flex-direction: row; text-align: right; } 
+        }
+
+        /* --- تعديلات الطباعة لإخفاء الرابط والدومين --- */
         @media print {
-            body { display: block; background: white; }
-            .sidebar { display: none; }
-            .preview-area { padding: 0; background: white; display: block; }
-            .invoice-paper { width: 100%; box-shadow: none; padding: 0; margin: 0; border: none; }
-            .watermark { opacity: 0.05 !important; -webkit-print-color-adjust: exact; }
-            @page { size: A4; margin: 15mm; }
+            @page {
+                size: A4;
+                margin: 0; /* إلغاء هوامش المتصفح التي يوضع فيها الرابط */
+            }
+            body { 
+                display: block; 
+                background: white; 
+                margin: 0; 
+                padding: 0;
+            }
+            .sidebar { display: none !important; }
+            .preview-area { 
+                padding: 0; 
+                background: white; 
+                display: block;
+                overflow: visible;
+            }
+            .invoice-paper { 
+                width: 100%; 
+                box-shadow: none; 
+                margin: 0; 
+                border: none;
+                padding: 15mm; /* إضافة الهامش يدوياً لضمان نظافة الورقة */
+                min-height: 297mm;
+            }
+            .watermark { opacity: 0.1 !important; -webkit-print-color-adjust: exact; }
         }
     </style>
 </head>
@@ -251,10 +260,9 @@
             <header>
                 <div class="brand-info">
                     <h1>أمل حشيش للمفروشات</h1>
-                    <p>القاهرة</p>
-                    <p>ت:رقم التلفون لو عاوز </p>
-                    <p>السجيل الضريبي </p>
-
+                    <p>العنوان: القاهرة</p>
+                    <p>ت: 01xxxxxxxxx</p>
+                    <p>السجل الضريبي: xxx-xxx-xxx</p>
                 </div>
                 <div class="logo-box">
                     <img src="Amal hashish.png" alt="Logo">
@@ -270,8 +278,8 @@
                     <span class="meta-label">رقم الفاتورة</span>
                     <span class="meta-val" id="num">#----</span>
                 </div>
-                <div class="meta-item" style="align-self: center;">
-                    <span id="status" style="background:#e2e8f0; padding:4px 10px; border-radius:15px; font-size:0.8rem;">مسودة</span>
+                <div class="meta-item" style="align-self: center; margin-right: auto;">
+                    <span id="status" style="background:#e2e8f0; padding:4px 10px; border-radius:15px; font-size:0.75rem;">مسودة</span>
                 </div>
             </div>
 
@@ -280,16 +288,14 @@
             </div>
 
             <footer>
-                <div style="font-size:0.9rem; color:#64748b;">
-                    <p><strong>تحت امرك في أي وقت :</strong> </p>
+                <div class="footer-text-group">
+                    <p class="footer-note">تحت امرك في أي وقت</p>
+                    <p class="footer-sub">تابعونا لكل جديد</p>
                 </div>
                 
                 <img class="qr-img" src="https://quickchart.io/qr?text=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D100086758131967&size=100">
-<div style="font-size:0.9rem; color:#64748b;">
-                    <p><strong>تابعونا لكل جديد</strong> 
-                </div>
-              </footer>
-            </div>
+            </footer>
+        </div>
     </main>
 
     <script>
@@ -301,7 +307,6 @@
         
         let count = localStorage.getItem('inv_count') || 0;
 
-        // تحديث فوري للنص
         txt.addEventListener('input', function(){
             preview.innerText = this.value || 'محتوى الفاتورة سيظهر هنا...';
             if(statusEl.innerText.includes('تم')) {
@@ -315,7 +320,6 @@
             if(!txt.value.trim()) return alert('اكتب البيانات أولاً');
             count++;
             localStorage.setItem('inv_count', count);
-            
             numEl.innerText = 'INV-' + String(count).padStart(4, '0');
             dateEl.innerText = new Date().toLocaleDateString('ar-EG');
             statusEl.innerText = 'تم الإصدار ✅';
@@ -334,63 +338,28 @@
             }
         }
 
-        // --- الدالة السحرية لإصلاح الصورة على الموبايل ---
         function downloadImg() {
             const btn = document.getElementById('dlBtn');
             const originalText = btn.innerText;
-            btn.innerText = "جاري المعالجة...";
+            btn.innerText = "جاري الحفظ...";
             btn.disabled = true;
 
             const element = document.getElementById('invoice');
-            
-            // 1. نقوم بحفظ إعدادات الستايل الحالية
             const originalWidth = element.style.width;
-            const originalPadding = element.style.padding;
-            const originalBoxShadow = element.style.boxShadow;
             
-            // 2. نجبر العنصر يأخذ مقاس A4 وستايل الكمبيوتر مؤقتاً قبل التصوير
-            // حتى لو كنا فاتحين من الموبايل
             element.style.width = '210mm'; 
-            element.style.padding = '20mm';
-            element.style.borderRadius = '0';
-            element.style.boxShadow = 'none'; // إزالة الظل لجودة أفضل
             
-            // تعديل مؤقت للهيدر عشان يظبط في الصورة لو كان الموبايل قالبه
-            const header = element.querySelector('header');
-            const originalHeaderDisplay = header.style.flexDirection;
-            if(window.innerWidth < 768) {
-                header.style.flexDirection = 'row'; // إجبار الهيدر يكون أفقي في الصورة
-                header.style.textAlign = 'right';
-                element.querySelector('.logo-box').style.justifyContent = 'flex-end';
-            }
-
-            // 3. التقاط الصورة
             html2canvas(element, {
-                scale: 2, // جودة عالية
+                scale: 2,
                 useCORS: true,
-                windowWidth: 1200 // إيهام الكود بأن الشاشة عريضة
+                windowWidth: 1200
             }).then(canvas => {
-                // 4. تحميل الصورة
                 const link = document.createElement('a');
                 link.download = `Invoice_${numEl.innerText}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
 
-                // 5. استرجاع شكل الموبايل الطبيعي
                 element.style.width = originalWidth;
-                element.style.padding = originalPadding;
-                element.style.boxShadow = originalBoxShadow;
-                element.style.borderRadius = '';
-                if(window.innerWidth < 768) {
-                    header.style.flexDirection = '';
-                    header.style.textAlign = '';
-                    element.querySelector('.logo-box').style.justifyContent = '';
-                }
-
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }).catch(err => {
-                alert('حدث خطأ');
                 btn.innerText = originalText;
                 btn.disabled = false;
             });
