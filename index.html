@@ -85,7 +85,7 @@
     .invoice-paper{
       background:#fff;
       width:210mm;
-      min-height:297mm;
+      min-height:297mm;          /* للعرض الطبيعي */
       padding:20mm;
       position:relative;
       box-shadow:0 20px 50px rgba(0,0,0,.3);
@@ -112,6 +112,7 @@
       border-radius:30px;
     }
 
+    /* ✅ المحتوى فوق العلامة المائية */
     header, .meta-data, .inv-body, footer{
       position:relative;
       z-index:1;
@@ -185,7 +186,7 @@
       .desktop-btns{ display:none; }
     }
 
-    /* ===== Print Fix ===== */
+    /* ===== ✅ Print Fix (iPhone/IOS) ===== */
     @media print{
       @page{ size:A4; margin:0; }
 
@@ -209,15 +210,41 @@
         margin:0 !important;
         background:#fff !important;
         display:block !important;
+        overflow:visible !important;
       }
 
+      /* ✅ أهم تعديل: تثبيت الارتفاع ومنع كسر صفحة بسبب زيادة بسيطة */
       .invoice-paper{
         width:210mm !important;
-        min-height:297mm !important;
-        height:297mm !important;
+        height:297mm !important;      /* بدل min-height */
+        min-height:unset !important;
         margin:0 !important;
-        padding:20mm !important;
+        padding:15mm !important;      /* كان 20mm */
         box-shadow:none !important;
+        overflow:hidden !important;
+      }
+
+      /* ✅ تقليل بسيط للخط وقت الطباعة فقط */
+      .inv-body{
+        font-size:1.25rem !important;
+        line-height:1.7 !important;
+      }
+
+      /* ✅ تقليل مسافات لضمان صفحة واحدة */
+      header{
+        margin-bottom:18px !important;
+        padding-bottom:14px !important;
+      }
+
+      .meta-data{
+        margin-bottom:18px !important;
+        padding:14px !important;
+      }
+
+      /* ✅ خليه يلزق تحت بدل ما يعمل كسر */
+      footer{
+        margin-top:auto !important;
+        padding-top:12px !important;
       }
     }
   </style>
@@ -243,7 +270,7 @@
   </aside>
 
   <main class="preview-area">
-    <div class="invoice-paper">
+    <div class="invoice-paper" id="paper">
 
       <div class="watermark">أمل حشيش</div>
 
