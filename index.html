@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>فاتورة أمل حشيش</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
 
   <style>
@@ -24,7 +25,7 @@
       overflow:hidden;
     }
 
-    /* --- Sidebar --- */
+    /* ===== Sidebar ===== */
     .sidebar{
       width:350px;
       background:#fff;
@@ -70,7 +71,7 @@
     .btn-paste{ background:#dcfce7; color:#166534; }
     .btn-clear{ background:#fee2e2; color:#dc2626; height:35px; font-size:.8rem; }
 
-    /* --- Preview --- */
+    /* ===== Preview ===== */
     .preview-area{
       flex:1;
       background:#64748b;
@@ -80,7 +81,7 @@
       justify-content:center;
     }
 
-    /* ورقة A4 */
+    /* ===== A4 Paper ===== */
     .invoice-paper{
       background:#fff;
       width:210mm;
@@ -90,31 +91,27 @@
       box-shadow:0 20px 50px rgba(0,0,0,.3);
       display:flex;
       flex-direction:column;
-      overflow:hidden; /* مهم للـ watermark */
+      overflow:hidden;
     }
 
-    /* ✅ العلامة المائية */
+    /* ✅ Small Center Watermark */
     .watermark{
       position:absolute;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      transform:rotate(-35deg);
-      font-size:8rem;
+      top:50%;
+      left:50%;
+      transform:translate(-50%, -50%);
+      font-size:3.5rem;
       font-weight:900;
       white-space:nowrap;
       pointer-events:none;
       z-index:0;
 
-      /* لون أوضح شوية للطباعة */
-      color:rgba(30,58,138,0.07);
-      border:10px solid rgba(30,58,138,0.06);
-      padding:20px 50px;
-      border-radius:40px;
+      color:rgba(30,58,138,0.08);
+      border:6px solid rgba(30,58,138,0.06);
+      padding:10px 35px;
+      border-radius:30px;
     }
 
-    /* ✅ خلي كل محتوى الفاتورة فوق العلامة المائية */
     header, .meta-data, .inv-body, footer{
       position:relative;
       z-index:1;
@@ -158,13 +155,13 @@
       align-items:flex-end;
     }
 
-    /* --- Mobile --- */
+    /* ===== Mobile ===== */
     .mobile-buttons{ display:none; }
 
     @media (max-width:768px){
       body{ flex-direction:column; overflow:auto; height:auto; }
-      .sidebar{ width:100%; height:auto; padding:15px; border-left:none; }
-      .preview-area{ padding:10px; background:#cbd5e1; height:auto; padding-bottom:150px; }
+      .sidebar{ width:100%; padding:15px; border-left:none; }
+      .preview-area{ padding:10px; background:#cbd5e1; padding-bottom:150px; }
 
       .invoice-paper{
         width:100%;
@@ -188,9 +185,8 @@
       .desktop-btns{ display:none; }
     }
 
-    /* --- ✅ Print Fix --- */
+    /* ===== Print Fix ===== */
     @media print{
-      /* خليه A4 حقيقي */
       @page{ size:A4; margin:0; }
 
       html,body{
@@ -199,10 +195,8 @@
         margin:0 !important;
         padding:0 !important;
         background:#fff !important;
-        overflow:visible !important;
       }
 
-      /* مهم لطباعة الخلفيات والـ watermark */
       *{
         -webkit-print-color-adjust:exact !important;
         print-color-adjust:exact !important;
@@ -215,7 +209,6 @@
         margin:0 !important;
         background:#fff !important;
         display:block !important;
-        overflow:visible !important;
       }
 
       .invoice-paper{
@@ -225,19 +218,13 @@
         margin:0 !important;
         padding:20mm !important;
         box-shadow:none !important;
-        border:none !important;
-      }
-
-      /* خليه واضح وقت الطباعة */
-      .watermark{
-        color:rgba(30,58,138,0.09) !important;
-        border-color:rgba(30,58,138,0.07) !important;
       }
     }
   </style>
 </head>
 
 <body>
+
   <aside class="sidebar">
     <h2 style="text-align:center; color:var(--primary); margin:0;">لوحة التحكم</h2>
 
@@ -249,14 +236,15 @@
     <textarea id="txtIn" placeholder="اكتب الأصناف هنا..."></textarea>
 
     <div class="btn-container desktop-btns">
-      <button id="btnPasteD" class="btn-paste" onclick="doPaste()">📋 لصق النص</button>
+      <button class="btn-paste" onclick="doPaste()">📋 لصق النص</button>
       <button class="btn-issue" onclick="issueInvoice()">✨ إصدار الفاتورة</button>
       <button class="btn-print" onclick="doPrint()">🖨️ طباعة الفاتورة</button>
     </div>
   </aside>
 
   <main class="preview-area">
-    <div class="invoice-paper" id="paper">
+    <div class="invoice-paper">
+
       <div class="watermark">أمل حشيش</div>
 
       <header>
@@ -286,16 +274,19 @@
 
       <footer>
         <div>
-          <p style="font-weight:900; color:var(--primary); margin:0; font-size:1.3rem;">🌙 رمضان كريم - كل عام وأنتم بخير</p>
+          <p style="font-weight:900; color:var(--primary); margin:0; font-size:1.3rem;">
+            🌙 رمضان كريم - كل عام وأنتم بخير
+          </p>
           <p style="color:#64748b; margin:5px 0 0 0;">نشكركم لزيارتكم</p>
         </div>
         <img style="width:90px;" src="https://quickchart.io/qr?text=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D100086758131967&size=100">
       </footer>
+
     </div>
   </main>
 
   <div class="mobile-buttons">
-    <button id="btnPasteM" class="btn-paste" onclick="doPaste()">📋 لصق</button>
+    <button class="btn-paste" onclick="doPaste()">📋 لصق</button>
     <button class="btn-issue" onclick="issueAndPrint()">✨ إصدار وطباعة</button>
   </div>
 
@@ -307,53 +298,49 @@
 
     let invCount = localStorage.getItem('inv_count') || 0;
 
-    input.addEventListener('input', (e) => {
+    input.addEventListener('input', e=>{
       output.innerText = e.target.value || 'محتوى الفاتورة سيظهر هنا...';
     });
 
-    function issueInvoice() {
+    function issueInvoice(){
       invCount++;
       localStorage.setItem('inv_count', invCount);
-      numEl.innerText = 'INV-' + String(invCount).padStart(4, '0');
+      numEl.innerText = 'INV-' + String(invCount).padStart(4,'0');
       dateEl.innerText = new Date().toLocaleDateString('ar-EG');
-      return true;
     }
 
-    function doPrint() {
-      if (numEl.innerText === '#----') issueInvoice();
+    function doPrint(){
+      if(numEl.innerText === '#----') issueInvoice();
       window.print();
     }
 
-    function issueAndPrint() {
+    function issueAndPrint(){
       issueInvoice();
-      setTimeout(() => window.print(), 300);
+      setTimeout(()=>window.print(),300);
     }
 
-    async function doPaste() {
-      const btnM = document.getElementById('btnPasteM');
-      try {
+    async function doPaste(){
+      try{
         const text = await navigator.clipboard.readText();
-        if (text) {
+        if(text){
           input.value = text;
           output.innerText = text;
           input.focus();
         }
-      } catch (err) {
-        if (btnM) {
-          btnM.innerText = "❌ اضغط مطولاً للصق";
-          setTimeout(() => btnM.innerText = "📋 لصق", 3000);
-        }
+      }catch(err){
+        alert('اضغط مطولاً داخل المربع للصق');
         input.focus();
       }
     }
 
-    function clearInvoice() {
-      if (confirm('مسح البيانات؟')) {
-        input.value = '';
-        output.innerText = 'محتوى الفاتورة سيظهر هنا...';
-        numEl.innerText = '#----';
+    function clearInvoice(){
+      if(confirm('مسح البيانات؟')){
+        input.value='';
+        output.innerText='محتوى الفاتورة سيظهر هنا...';
+        numEl.innerText='#----';
       }
     }
   </script>
+
 </body>
 </html>
