@@ -1,315 +1,359 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>فاتورة أمل حشيش</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --primary: #1e3a8a;
-            --accent: #f59e0b;
-            --bg: #f1f5f9;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>فاتورة أمل حشيش</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  <style>
+    :root{
+      --primary:#1e3a8a;
+      --accent:#f59e0b;
+      --bg:#f1f5f9;
+    }
 
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background: var(--bg);
-            margin: 0;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
+    *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    html,body{ margin:0; padding:0; }
 
-        /* --- Sidebar (لوحة التحكم) --- */
-        .sidebar {
-            width: 350px;
-            background: #fff;
-            padding: 20px;
-            border-left: 2px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 100;
-        }
+    body{
+      font-family:'Tajawal', sans-serif;
+      background:var(--bg);
+      display:flex;
+      height:100vh;
+      overflow:hidden;
+    }
 
-        textarea {
-            width: 100%;
-            flex: 1;
-            padding: 15px;
-            border: 2px solid #cbd5e1;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 16px;
-            resize: none;
-            outline: none;
-            background: #f8fafc;
-        }
+    /* --- Sidebar --- */
+    .sidebar{
+      width:350px;
+      background:#fff;
+      padding:20px;
+      border-left:2px solid #e2e8f0;
+      display:flex;
+      flex-direction:column;
+      gap:15px;
+      z-index:100;
+    }
 
-        .btn-container { display: flex; flex-direction: column; gap: 8px; }
-        
-        button {
-            height: 50px;
-            border-radius: 10px;
-            border: none;
-            font-weight: bold;
-            font-family: inherit;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 1rem;
-        }
+    textarea{
+      width:100%;
+      flex:1;
+      padding:15px;
+      border:2px solid #cbd5e1;
+      border-radius:12px;
+      font-family:inherit;
+      font-size:16px;
+      resize:none;
+      outline:none;
+      background:#f8fafc;
+    }
 
-        .btn-issue { background: var(--accent); color: white; } /* زر إصدار الفاتورة */
-        .btn-print { background: var(--primary); color: white; }
-        .btn-paste { background: #dcfce7; color: #166534; }
-        .btn-clear { background: #fee2e2; color: #dc2626; height: 35px; font-size: 0.8rem; }
+    .btn-container{ display:flex; flex-direction:column; gap:8px; }
 
-        /* --- Preview Area --- */
-        .preview-area {
-            flex: 1;
-            background: #64748b;
-            padding: 40px;
-            overflow-y: auto;
-            display: flex;
-            justify-content: center;
-        }
+    button{
+      height:50px;
+      border-radius:10px;
+      border:none;
+      font-weight:bold;
+      font-family:inherit;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      font-size:1rem;
+    }
 
-        /* تنسيق الورقة الثابت لضمان جودة الطباعة */
-        .invoice-paper {
-            background: #fff;
-            width: 210mm;
-            min-height: 297mm;
-            padding: 20mm;
-            position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            display: flex;
-            flex-direction: column;
-        }
+    .btn-issue{ background:var(--accent); color:#fff; }
+    .btn-print{ background:var(--primary); color:#fff; }
+    .btn-paste{ background:#dcfce7; color:#166534; }
+    .btn-clear{ background:#fee2e2; color:#dc2626; height:35px; font-size:.8rem; }
 
-        .watermark {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            font-size: 8rem;
-            color: rgba(0,0,0,0.04);
-            font-weight: 900;
-            white-space: nowrap;
-            pointer-events: none;
-            border: 10px solid rgba(0,0,0,0.04);
-            padding: 20px 50px;
-            border-radius: 40px;
-        }
+    /* --- Preview --- */
+    .preview-area{
+      flex:1;
+      background:#64748b;
+      padding:40px;
+      overflow-y:auto;
+      display:flex;
+      justify-content:center;
+    }
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            border-bottom: 4px solid var(--primary);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
+    /* ورقة A4 */
+    .invoice-paper{
+      background:#fff;
+      width:210mm;
+      min-height:297mm;
+      padding:20mm;
+      position:relative;
+      box-shadow:0 20px 50px rgba(0,0,0,.3);
+      display:flex;
+      flex-direction:column;
+      overflow:hidden; /* مهم للـ watermark */
+    }
 
-        .brand-info h1 { margin: 0; color: var(--primary); font-size: 2.2rem; }
-        .brand-info p { margin: 5px 0; color: #475569; font-weight: bold; }
+    /* ✅ العلامة المائية */
+    .watermark{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transform:rotate(-35deg);
+      font-size:8rem;
+      font-weight:900;
+      white-space:nowrap;
+      pointer-events:none;
+      z-index:0;
 
-        .meta-data {
-            display: flex;
-            gap: 50px;
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-        }
+      /* لون أوضح شوية للطباعة */
+      color:rgba(30,58,138,0.07);
+      border:10px solid rgba(30,58,138,0.06);
+      padding:20px 50px;
+      border-radius:40px;
+    }
 
-        .inv-body {
-            flex: 1;
-            font-size: 1.4rem;
-            line-height: 1.8;
-            white-space: pre-wrap;
-            color: #1e293b;
-        }
+    /* ✅ خلي كل محتوى الفاتورة فوق العلامة المائية */
+    header, .meta-data, .inv-body, footer{
+      position:relative;
+      z-index:1;
+    }
 
-        footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid #e2e8f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      border-bottom:4px solid var(--primary);
+      padding-bottom:20px;
+      margin-bottom:30px;
+    }
 
-        /* --- Mobile Responsive --- */
-        .mobile-buttons { display: none; }
+    .brand-info h1{ margin:0; color:var(--primary); font-size:2.2rem; }
+    .brand-info p{ margin:5px 0; color:#475569; font-weight:bold; }
 
-        @media (max-width: 768px) {
-            body { flex-direction: column; overflow: auto; height: auto; }
-            .sidebar { width: 100%; height: auto; padding: 15px; border-left: none; }
-            .preview-area { padding: 10px; background: #cbd5e1; height: auto; padding-bottom: 150px; }
-            
-            /* جعل الورقة في الموبايل تبدو كأنها عرض كامل للمعالجة */
-            .invoice-paper { 
-                width: 100%; 
-                min-height: auto; 
-                padding: 10mm; 
-                transform: scale(1);
-                box-shadow: none;
-            }
+    .meta-data{
+      display:flex;
+      gap:50px;
+      background:#f8fafc;
+      padding:20px;
+      border-radius:12px;
+      margin-bottom:30px;
+    }
 
-            .mobile-buttons {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
-                position: fixed;
-                bottom: 0; left: 0; width: 100%;
-                background: #fff; padding: 15px;
-                box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
-                z-index: 200;
-            }
-            .desktop-btns { display: none; }
-        }
+    .inv-body{
+      flex:1;
+      font-size:1.4rem;
+      line-height:1.8;
+      white-space:pre-wrap;
+      color:#1e293b;
+    }
 
-        /* --- Print Optimization (إخفاء الروابط تماماً) --- */
-        @media print {
-            @page { size: A4; margin: 0 !important; }
-            body { background: white; display: block; height: auto; }
-            .sidebar, .mobile-buttons { display: none !important; }
-            .preview-area { padding: 0 !important; background: white; display: block; }
-            .invoice-paper { 
-                width: 210mm !important; 
-                height: 297mm !important; 
-                margin: 0 !important; 
-                padding: 20mm !important; 
-                box-shadow: none !important;
-            }
-            .watermark { opacity: 0.1 !important; -webkit-print-color-adjust: exact; }
-        }
-    </style>
+    footer{
+      margin-top:40px;
+      padding-top:20px;
+      border-top:2px solid #e2e8f0;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+    }
+
+    /* --- Mobile --- */
+    .mobile-buttons{ display:none; }
+
+    @media (max-width:768px){
+      body{ flex-direction:column; overflow:auto; height:auto; }
+      .sidebar{ width:100%; height:auto; padding:15px; border-left:none; }
+      .preview-area{ padding:10px; background:#cbd5e1; height:auto; padding-bottom:150px; }
+
+      .invoice-paper{
+        width:100%;
+        min-height:auto;
+        padding:10mm;
+        box-shadow:none;
+      }
+
+      .mobile-buttons{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+        position:fixed;
+        bottom:0; left:0; width:100%;
+        background:#fff;
+        padding:15px;
+        box-shadow:0 -5px 20px rgba(0,0,0,.1);
+        z-index:200;
+      }
+
+      .desktop-btns{ display:none; }
+    }
+
+    /* --- ✅ Print Fix --- */
+    @media print{
+      /* خليه A4 حقيقي */
+      @page{ size:A4; margin:0; }
+
+      html,body{
+        width:210mm;
+        height:297mm;
+        margin:0 !important;
+        padding:0 !important;
+        background:#fff !important;
+        overflow:visible !important;
+      }
+
+      /* مهم لطباعة الخلفيات والـ watermark */
+      *{
+        -webkit-print-color-adjust:exact !important;
+        print-color-adjust:exact !important;
+      }
+
+      .sidebar, .mobile-buttons{ display:none !important; }
+
+      .preview-area{
+        padding:0 !important;
+        margin:0 !important;
+        background:#fff !important;
+        display:block !important;
+        overflow:visible !important;
+      }
+
+      .invoice-paper{
+        width:210mm !important;
+        min-height:297mm !important;
+        height:297mm !important;
+        margin:0 !important;
+        padding:20mm !important;
+        box-shadow:none !important;
+        border:none !important;
+      }
+
+      /* خليه واضح وقت الطباعة */
+      .watermark{
+        color:rgba(30,58,138,0.09) !important;
+        border-color:rgba(30,58,138,0.07) !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <aside class="sidebar">
+    <h2 style="text-align:center; color:var(--primary); margin:0;">لوحة التحكم</h2>
 
-    <aside class="sidebar">
-        <h2 style="text-align:center; color:var(--primary); margin:0;">لوحة التحكم</h2>
-        
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <label style="font-weight:bold;">بيانات الفاتورة:</label>
-            <button class="btn-clear" onclick="clearInvoice()">مسح</button>
-        </div>
-        
-        <textarea id="txtIn" placeholder="اكتب الأصناف هنا..."></textarea>
-
-        <div class="btn-container desktop-btns">
-            <button id="btnPasteD" class="btn-paste" onclick="doPaste()">📋 لصق النص</button>
-            <button class="btn-issue" onclick="issueInvoice()">✨ إصدار الفاتورة</button>
-            <button class="btn-print" onclick="doPrint()">🖨️ طباعة الفاتورة</button>
-        </div>
-    </aside>
-
-    <main class="preview-area">
-        <div class="invoice-paper" id="paper">
-            <div class="watermark">أمل حشيش</div>
-
-            <header>
-                <div class="brand-info">
-                    <h1>أمل حشيش للمفروشات</h1>
-                    <p>العنوان: القاهرة</p>
-                    <p dir="ltr" style="text-align: right;">01063185555 - 01063195555</p>
-                </div>
-                <img src="Amal hashish.png" style="height:100px; object-fit:contain;">
-            </header>
-
-            <div class="meta-data">
-                <div>
-                    <div style="font-size:0.9rem; color:#64748b;">التاريخ:</div>
-                    <div id="date" style="font-weight:900; font-size:1.3rem;">--/--/----</div>
-                </div>
-                <div style="width:2px; background:#e2e8f0;"></div>
-                <div>
-                    <div style="font-size:0.9rem; color:#64748b;">رقم الفاتورة:</div>
-                    <div id="num" style="font-weight:900; font-size:1.3rem;">#----</div>
-                </div>
-            </div>
-
-            <div class="inv-body" id="bodyOut">محتوى الفاتورة سيظهر هنا...</div>
-
-            <footer>
-                <div>
-                    <p style="font-weight:900; color:var(--primary); margin:0; font-size:1.3rem;">🌙 رمضان كريم - كل عام وأنتم بخير</p>
-                    <p style="color:#64748b; margin:5px 0 0 0;">نشكركم لزيارتكم</p>
-                </div>
-                <img style="width:90px;" src="https://quickchart.io/qr?text=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D100086758131967&size=100">
-            </footer>
-        </div>
-    </main>
-
-    <div class="mobile-buttons">
-        <button id="btnPasteM" class="btn-paste" onclick="doPaste()">📋 لصق</button>
-        <button class="btn-issue" onclick="issueAndPrint()">✨ إصدار وطباعة</button>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <label style="font-weight:bold;">بيانات الفاتورة:</label>
+      <button class="btn-clear" onclick="clearInvoice()">مسح</button>
     </div>
 
-    <script>
-        const input = document.getElementById('txtIn');
-        const output = document.getElementById('bodyOut');
-        const dateEl = document.getElementById('date');
-        const numEl = document.getElementById('num');
-        
-        let invCount = localStorage.getItem('inv_count') || 0;
+    <textarea id="txtIn" placeholder="اكتب الأصناف هنا..."></textarea>
 
-        input.addEventListener('input', (e) => {
-            output.innerText = e.target.value || 'محتوى الفاتورة سيظهر هنا...';
-        });
+    <div class="btn-container desktop-btns">
+      <button id="btnPasteD" class="btn-paste" onclick="doPaste()">📋 لصق النص</button>
+      <button class="btn-issue" onclick="issueInvoice()">✨ إصدار الفاتورة</button>
+      <button class="btn-print" onclick="doPrint()">🖨️ طباعة الفاتورة</button>
+    </div>
+  </aside>
 
-        // دالة إصدار الفاتورة
-        function issueInvoice() {
-            invCount++;
-            localStorage.setItem('inv_count', invCount);
-            numEl.innerText = 'INV-' + String(invCount).padStart(4, '0');
-            dateEl.innerText = new Date().toLocaleDateString('ar-EG');
-            return true;
+  <main class="preview-area">
+    <div class="invoice-paper" id="paper">
+      <div class="watermark">أمل حشيش</div>
+
+      <header>
+        <div class="brand-info">
+          <h1>أمل حشيش للمفروشات</h1>
+          <p>العنوان: القاهرة</p>
+          <p dir="ltr" style="text-align:right;">01063185555 - 01063195555</p>
+        </div>
+        <img src="Amal hashish.png" style="height:100px; object-fit:contain;">
+      </header>
+
+      <div class="meta-data">
+        <div>
+          <div style="font-size:.9rem; color:#64748b;">التاريخ:</div>
+          <div id="date" style="font-weight:900; font-size:1.3rem;">--/--/----</div>
+        </div>
+
+        <div style="width:2px; background:#e2e8f0;"></div>
+
+        <div>
+          <div style="font-size:.9rem; color:#64748b;">رقم الفاتورة:</div>
+          <div id="num" style="font-weight:900; font-size:1.3rem;">#----</div>
+        </div>
+      </div>
+
+      <div class="inv-body" id="bodyOut">محتوى الفاتورة سيظهر هنا...</div>
+
+      <footer>
+        <div>
+          <p style="font-weight:900; color:var(--primary); margin:0; font-size:1.3rem;">🌙 رمضان كريم - كل عام وأنتم بخير</p>
+          <p style="color:#64748b; margin:5px 0 0 0;">نشكركم لزيارتكم</p>
+        </div>
+        <img style="width:90px;" src="https://quickchart.io/qr?text=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D100086758131967&size=100">
+      </footer>
+    </div>
+  </main>
+
+  <div class="mobile-buttons">
+    <button id="btnPasteM" class="btn-paste" onclick="doPaste()">📋 لصق</button>
+    <button class="btn-issue" onclick="issueAndPrint()">✨ إصدار وطباعة</button>
+  </div>
+
+  <script>
+    const input = document.getElementById('txtIn');
+    const output = document.getElementById('bodyOut');
+    const dateEl = document.getElementById('date');
+    const numEl = document.getElementById('num');
+
+    let invCount = localStorage.getItem('inv_count') || 0;
+
+    input.addEventListener('input', (e) => {
+      output.innerText = e.target.value || 'محتوى الفاتورة سيظهر هنا...';
+    });
+
+    function issueInvoice() {
+      invCount++;
+      localStorage.setItem('inv_count', invCount);
+      numEl.innerText = 'INV-' + String(invCount).padStart(4, '0');
+      dateEl.innerText = new Date().toLocaleDateString('ar-EG');
+      return true;
+    }
+
+    function doPrint() {
+      if (numEl.innerText === '#----') issueInvoice();
+      window.print();
+    }
+
+    function issueAndPrint() {
+      issueInvoice();
+      setTimeout(() => window.print(), 300);
+    }
+
+    async function doPaste() {
+      const btnM = document.getElementById('btnPasteM');
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+          input.value = text;
+          output.innerText = text;
+          input.focus();
         }
-
-        // دالة الطباعة
-        function doPrint() {
-            if (numEl.innerText === '#----') issueInvoice();
-            window.print();
+      } catch (err) {
+        if (btnM) {
+          btnM.innerText = "❌ اضغط مطولاً للصق";
+          setTimeout(() => btnM.innerText = "📋 لصق", 3000);
         }
+        input.focus();
+      }
+    }
 
-        // للموبايل: إصدار وطباعة بضغطة واحدة
-        function issueAndPrint() {
-            issueInvoice();
-            setTimeout(() => window.print(), 500);
-        }
-
-        // دالة اللصق الذكية
-        async function doPaste() {
-            const btnM = document.getElementById('btnPasteM');
-            try {
-                const text = await navigator.clipboard.readText();
-                if (text) {
-                    input.value = text;
-                    output.innerText = text;
-                    input.focus();
-                }
-            } catch (err) {
-                // بدلاً من رسالة الـ Pop-up، نغير نص الزر للتنبيه
-                btnM.innerText = "❌ اضغط مطولاً للصق";
-                input.focus();
-                setTimeout(() => btnM.innerText = "📋 لصق", 3000);
-            }
-        }
-
-        function clearInvoice() {
-            if(confirm('مسح البيانات؟')) {
-                input.value = '';
-                output.innerText = 'محتوى الفاتورة سيظهر هنا...';
-                numEl.innerText = '#----';
-            }
-        }
-    </script>
+    function clearInvoice() {
+      if (confirm('مسح البيانات؟')) {
+        input.value = '';
+        output.innerText = 'محتوى الفاتورة سيظهر هنا...';
+        numEl.innerText = '#----';
+      }
+    }
+  </script>
 </body>
 </html>
