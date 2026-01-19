@@ -14,7 +14,7 @@
       --bg:#f1f5f9;
     }
 
-    *{ box-sizing:border-box; }
+    *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
     html,body{ margin:0; padding:0; }
 
     body{
@@ -59,6 +59,10 @@
       font-weight:bold;
       font-family:inherit;
       cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
       font-size:1rem;
     }
 
@@ -81,8 +85,8 @@
     .invoice-paper{
       background:#fff;
       width:210mm;
-      height:297mm;        /* صفحة واحدة فقط */
-      padding:15mm;
+      min-height:297mm;          /* للعرض الطبيعي */
+      padding:20mm;
       position:relative;
       box-shadow:0 20px 50px rgba(0,0,0,.3);
       display:flex;
@@ -90,7 +94,7 @@
       overflow:hidden;
     }
 
-    /* ===== Watermark ===== */
+    /* ✅ Small Center Watermark */
     .watermark{
       position:absolute;
       top:50%;
@@ -98,15 +102,17 @@
       transform:translate(-50%, -50%);
       font-size:3.5rem;
       font-weight:900;
+      white-space:nowrap;
+      pointer-events:none;
+      z-index:0;
+
       color:rgba(30,58,138,0.08);
       border:6px solid rgba(30,58,138,0.06);
       padding:10px 35px;
       border-radius:30px;
-      pointer-events:none;
-      z-index:0;
-      white-space:nowrap;
     }
 
+    /* ✅ المحتوى فوق العلامة المائية */
     header, .meta-data, .inv-body, footer{
       position:relative;
       z-index:1;
@@ -117,49 +123,79 @@
       justify-content:space-between;
       align-items:flex-start;
       border-bottom:4px solid var(--primary);
-      padding-bottom:14px;
-      margin-bottom:18px;
+      padding-bottom:20px;
+      margin-bottom:30px;
     }
 
-    .brand-info h1{ margin:0; color:var(--primary); font-size:2rem; }
-    .brand-info p{ margin:4px 0; color:#475569; font-weight:bold; }
+    .brand-info h1{ margin:0; color:var(--primary); font-size:2.2rem; }
+    .brand-info p{ margin:5px 0; color:#475569; font-weight:bold; }
 
     .meta-data{
       display:flex;
-      gap:40px;
+      gap:50px;
       background:#f8fafc;
-      padding:14px;
+      padding:20px;
       border-radius:12px;
-      margin-bottom:18px;
+      margin-bottom:30px;
     }
 
     .inv-body{
       flex:1;
-      font-size:1.35rem;   /* هيتظبط أوتوماتيك */
-      line-height:1.6;
+      font-size:1.4rem;
+      line-height:1.8;
       white-space:pre-wrap;
       color:#1e293b;
-      overflow:hidden;
     }
 
     footer{
-      margin-top:auto;
-      padding-top:10px;
+      margin-top:40px;
+      padding-top:20px;
       border-top:2px solid #e2e8f0;
       display:flex;
       justify-content:space-between;
       align-items:flex-end;
     }
 
-    /* ===== Print ===== */
+    /* ===== Mobile ===== */
+    .mobile-buttons{ display:none; }
+
+    @media (max-width:768px){
+      body{ flex-direction:column; overflow:auto; height:auto; }
+      .sidebar{ width:100%; padding:15px; border-left:none; }
+      .preview-area{ padding:10px; background:#cbd5e1; padding-bottom:150px; }
+
+      .invoice-paper{
+        width:100%;
+        min-height:auto;
+        padding:10mm;
+        box-shadow:none;
+      }
+
+      .mobile-buttons{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+        position:fixed;
+        bottom:0; left:0; width:100%;
+        background:#fff;
+        padding:15px;
+        box-shadow:0 -5px 20px rgba(0,0,0,.1);
+        z-index:200;
+      }
+
+      .desktop-btns{ display:none; }
+    }
+
+    /* ===== ✅ Print Fix (iPhone/IOS) ===== */
     @media print{
       @page{ size:A4; margin:0; }
 
       html,body{
         width:210mm;
         height:297mm;
-        margin:0;
-        padding:0;
+        margin:0 !important;
+        padding:0 !important;
+        background:#fff !important;
       }
 
       *{
@@ -167,15 +203,48 @@
         print-color-adjust:exact !important;
       }
 
-      .sidebar{ display:none !important; }
+      .sidebar, .mobile-buttons{ display:none !important; }
 
       .preview-area{
         padding:0 !important;
+        margin:0 !important;
         background:#fff !important;
+        display:block !important;
+        overflow:visible !important;
       }
 
+      /* ✅ أهم تعديل: تثبيت الارتفاع ومنع كسر صفحة بسبب زيادة بسيطة */
       .invoice-paper{
+        width:210mm !important;
+        height:297mm !important;      /* بدل min-height */
+        min-height:unset !important;
+        margin:0 !important;
+        padding:15mm !important;      /* كان 20mm */
         box-shadow:none !important;
+        overflow:hidden !important;
+      }
+
+      /* ✅ تقليل بسيط للخط وقت الطباعة فقط */
+      .inv-body{
+        font-size:1.25rem !important;
+        line-height:1.7 !important;
+      }
+
+      /* ✅ تقليل مسافات لضمان صفحة واحدة */
+      header{
+        margin-bottom:18px !important;
+        padding-bottom:14px !important;
+      }
+
+      .meta-data{
+        margin-bottom:18px !important;
+        padding:14px !important;
+      }
+
+      /* ✅ خليه يلزق تحت بدل ما يعمل كسر */
+      footer{
+        margin-top:auto !important;
+        padding-top:12px !important;
       }
     }
   </style>
@@ -184,19 +253,19 @@
 <body>
 
   <aside class="sidebar">
-    <h2 style="text-align:center; color:#1e3a8a; margin:0;">لوحة التحكم</h2>
+    <h2 style="text-align:center; color:var(--primary); margin:0;">لوحة التحكم</h2>
 
-    <div style="display:flex; justify-content:space-between;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
       <label style="font-weight:bold;">بيانات الفاتورة:</label>
       <button class="btn-clear" onclick="clearInvoice()">مسح</button>
     </div>
 
     <textarea id="txtIn" placeholder="اكتب الأصناف هنا..."></textarea>
 
-    <div class="btn-container">
+    <div class="btn-container desktop-btns">
       <button class="btn-paste" onclick="doPaste()">📋 لصق النص</button>
       <button class="btn-issue" onclick="issueInvoice()">✨ إصدار الفاتورة</button>
-      <button class="btn-print" onclick="doPrint()">🖨️ طباعة</button>
+      <button class="btn-print" onclick="doPrint()">🖨️ طباعة الفاتورة</button>
     </div>
   </aside>
 
@@ -211,17 +280,20 @@
           <p>العنوان: القاهرة</p>
           <p dir="ltr" style="text-align:right;">01063185555 - 01063195555</p>
         </div>
-        <img src="Amal hashish.png" style="height:90px;">
+        <img src="Amal hashish.png" style="height:100px; object-fit:contain;">
       </header>
 
       <div class="meta-data">
         <div>
-          <div style="font-size:.9rem;color:#64748b;">التاريخ:</div>
-          <div id="date" style="font-weight:900;">--/--/----</div>
+          <div style="font-size:.9rem; color:#64748b;">التاريخ:</div>
+          <div id="date" style="font-weight:900; font-size:1.3rem;">--/--/----</div>
         </div>
+
+        <div style="width:2px; background:#e2e8f0;"></div>
+
         <div>
-          <div style="font-size:.9rem;color:#64748b;">رقم الفاتورة:</div>
-          <div id="num" style="font-weight:900;">#----</div>
+          <div style="font-size:.9rem; color:#64748b;">رقم الفاتورة:</div>
+          <div id="num" style="font-weight:900; font-size:1.3rem;">#----</div>
         </div>
       </div>
 
@@ -229,61 +301,62 @@
 
       <footer>
         <div>
-          <p style="font-weight:900; color:#1e3a8a; margin:0;">🌙 رمضان كريم - كل عام وأنتم بخير</p>
-          <p style="color:#64748b; margin:0;">نشكركم لزيارتكم</p>
+          <p style="font-weight:900; color:var(--primary); margin:0; font-size:1.3rem;">
+            🌙 رمضان كريم - كل عام وأنتم بخير
+          </p>
+          <p style="color:#64748b; margin:5px 0 0 0;">نشكركم لزيارتكم</p>
         </div>
-        <img style="width:80px;" src="https://quickchart.io/qr?text=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D100086758131967&size=100">
+        <img style="width:90px;" src="https://quickchart.io/qr?text=https%3A%2F%2Fwww.facebook.com%2Fprofile.php%3Fid%3D100086758131967&size=100">
       </footer>
 
     </div>
   </main>
 
+  <div class="mobile-buttons">
+    <button class="btn-paste" onclick="doPaste()">📋 لصق</button>
+    <button class="btn-issue" onclick="issueAndPrint()">✨ إصدار وطباعة</button>
+  </div>
+
   <script>
     const input = document.getElementById('txtIn');
     const output = document.getElementById('bodyOut');
-    const paper = document.getElementById('paper');
-
     const dateEl = document.getElementById('date');
     const numEl = document.getElementById('num');
 
     let invCount = localStorage.getItem('inv_count') || 0;
 
-    input.addEventListener('input', () => {
-      output.innerText = input.value || 'محتوى الفاتورة سيظهر هنا...';
-      autoFitText();
+    input.addEventListener('input', e=>{
+      output.innerText = e.target.value || 'محتوى الفاتورة سيظهر هنا...';
     });
-
-    function autoFitText(){
-      let size = 1.35; // rem
-      output.style.fontSize = size + 'rem';
-
-      while (paper.scrollHeight > paper.clientHeight && size > 0.8){
-        size -= 0.05;
-        output.style.fontSize = size + 'rem';
-      }
-    }
 
     function issueInvoice(){
       invCount++;
       localStorage.setItem('inv_count', invCount);
       numEl.innerText = 'INV-' + String(invCount).padStart(4,'0');
       dateEl.innerText = new Date().toLocaleDateString('ar-EG');
-      autoFitText();
     }
 
     function doPrint(){
+      if(numEl.innerText === '#----') issueInvoice();
+      window.print();
+    }
+
+    function issueAndPrint(){
       issueInvoice();
-      setTimeout(()=>window.print(),200);
+      setTimeout(()=>window.print(),300);
     }
 
     async function doPaste(){
       try{
         const text = await navigator.clipboard.readText();
-        input.value = text;
-        output.innerText = text;
-        autoFitText();
-      }catch{
-        alert('اضغط مطولاً داخل مربع النص ثم لصق');
+        if(text){
+          input.value = text;
+          output.innerText = text;
+          input.focus();
+        }
+      }catch(err){
+        alert('اضغط مطولاً داخل المربع للصق');
+        input.focus();
       }
     }
 
