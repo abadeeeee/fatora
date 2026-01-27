@@ -10,16 +10,20 @@
   <style>
     :root {
       --primary: #1e3a8a;
-      --primary-light: #3b82f6;
-      --accent: #f59e0b;
-      --bg: #f8fafc;
+      --bg: #f1f5f9;
       --surface: #ffffff;
       --danger: #ef4444;
       --success: #10b981;
       --text-main: #1e293b;
     }
 
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+    * { 
+      box-sizing: border-box; 
+      -webkit-tap-highlight-color: transparent; 
+      margin: 0; 
+      padding: 0; 
+      touch-action: manipulation; /* تحسين استجابة اللمس */
+    }
     
     body {
       font-family: 'Tajawal', sans-serif;
@@ -27,130 +31,193 @@
       color: var(--text-main);
       height: 100vh;
       display: flex;
+      flex-direction: column;
       overflow: hidden;
     }
 
-    /* --- الهيكل الرئيسي --- */
-    .sidebar { width: 400px; background: var(--surface); border-left: 1px solid #e2e8f0; display: flex; flex-direction: column; z-index: 20; }
-    .preview-area { flex: 1; background: #cbd5e1; overflow-y: auto; display: flex; justify-content: center; padding: 20px; }
+    /* --- تحسين التنقل السفلي للموبايل --- */
+    .mobile-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--surface);
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+      z-index: 100;
+      padding-bottom: env(safe-area-inset-bottom); /* دعم هواتف آيفون الحديثة */
+    }
 
-    /* --- الموبايل Navigation --- */
-    .mobile-nav { display: none; position: fixed; bottom: 0; width: 100%; background: white; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 100; grid-template-columns: 1fr 1fr; }
-    .nav-btn { padding: 15px; text-align: center; border: none; background: none; font-family: inherit; font-weight: bold; color: #94a3b8; cursor: pointer; }
-    .nav-btn.active { color: var(--primary); border-top: 3px solid var(--primary); background: #eff6ff; }
+    .nav-btn {
+      padding: 12px;
+      text-align: center;
+      border: none;
+      background: none;
+      font-family: inherit;
+      font-weight: 700;
+      color: #94a3b8;
+      transition: 0.2s;
+    }
 
-    /* --- أزرار التحكم --- */
-    .sidebar-content { padding: 20px; overflow-y: auto; flex: 1; }
-    .header-box { text-align: center; margin-bottom: 20px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 15px; }
-    .header-box h2 { color: var(--primary); font-size: 1.5rem; }
-    .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-    
-    button.action-btn { padding: 12px 8px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .btn-paste { background: #ecfdf5; color: var(--success); border: 1px solid #bbf7d0; }
-    .btn-clear { background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; }
-    .btn-main { background: var(--primary); color: white; grid-column: span 2; flex-direction: row !important; font-size: 1.1rem; height: 55px; box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2); }
+    .nav-btn.active {
+      color: var(--primary);
+      background: #eff6ff;
+      border-top: 3px solid var(--primary);
+    }
 
-    textarea { width: 100%; height: calc(100vh - 350px); padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 16px; resize: none; outline: none; background: #fdfdfd; line-height: 1.4; }
-
-    /* --- تصميم ورقة الفاتورة --- */
-    .invoice-paper {
-      background: #fff;
-      width: 210mm;
-      min-height: 297mm;
-      padding: 12mm 15mm;
+    /* --- منطقة المحتوى --- */
+    .main-container {
+      flex: 1;
       position: relative;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      transform-origin: top center;
+      overflow: hidden;
+    }
+
+    .tab-content {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.3s ease-in-out;
       display: flex;
       flex-direction: column;
     }
 
-    .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 5rem; opacity: 0.05; font-weight: 900; white-space: nowrap; pointer-events: none; }
-    .inv-header { display: flex; justify-content: space-between; border-bottom: 3px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; }
-    .inv-logo { width: 90px; height: 90px; object-fit: contain; }
-    
-    .inv-meta { display: flex; justify-content: space-around; background: #f8fafc; padding: 10px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
-    .meta-col { text-align: center; }
-    .meta-col b { display: block; color: #64748b; font-size: 0.8rem; }
-    .meta-col span { font-size: 1.1rem; font-weight: 900; color: var(--primary); }
+    #edit-section { transform: translateX(0); }
+    #preview-section { transform: translateX(100%); background: #cbd5e1; padding: 10px; overflow-y: auto; }
 
-    .inv-body { flex: 1; font-size: 1.6rem; line-height: 1.2; color: #1e293b; white-space: pre-wrap; }
+    body.show-preview #edit-section { transform: translateX(-100%); }
+    body.show-preview #preview-section { transform: translateX(0); }
 
-    .inv-footer { border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px; display: flex; justify-content: space-between; align-items: flex-end; }
-
-    @media (max-width: 900px) {
-      body { flex-direction: column; }
-      .sidebar { width: 100%; height: calc(100vh - 65px); display: none; }
-      .sidebar.active-tab { display: flex; }
-      .preview-area { padding: 5px; height: calc(100vh - 65px); display: none; }
-      .preview-area.active-tab { display: flex; }
-      .mobile-nav { display: grid; }
-      .invoice-paper { width: 100%; padding: 8mm; }
-      textarea { height: 300px; }
+    /* --- واجهة التعديل السلسة --- */
+    .sidebar-content { 
+      padding: 15px; 
+      flex: 1; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 15px;
+      background: var(--surface);
     }
 
+    .btn-grid { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 10px; 
+    }
+    
+    .action-btn { 
+      padding: 15px; 
+      border-radius: 12px; 
+      border: none; 
+      font-weight: 700; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 10px; 
+      font-size: 1rem;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .action-btn:active { transform: scale(0.96); opacity: 0.8; }
+    
+    .btn-paste { background: #ecfdf5; color: var(--success); }
+    .btn-clear { background: #fef2f2; color: var(--danger); }
+    .btn-main { 
+      background: var(--primary); 
+      color: white; 
+      grid-column: span 2; 
+      height: 60px; 
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
+    }
+
+    textarea { 
+      flex: 1; 
+      width: 100%; 
+      padding: 15px; 
+      border: 2px solid #e2e8f0; 
+      border-radius: 15px; 
+      font-family: inherit; 
+      font-size: 17px; /* حجم خط مريح للكتابة */
+      resize: none; 
+      outline: none; 
+      background: #fdfdfd; 
+      line-height: 1.5;
+      -webkit-appearance: none;
+    }
+
+    /* --- تصميم الورقة (ثابت للمعاينة) --- */
+    .invoice-paper {
+      background: #fff;
+      width: 100%;
+      max-width: 210mm;
+      min-height: 297mm;
+      padding: 15mm 10mm;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .inv-header { display: flex; justify-content: space-between; border-bottom: 3px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; }
+    .inv-meta { display: flex; justify-content: space-around; background: #f8fafc; padding: 10px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
+    .inv-body { flex: 1; font-size: 1.5rem; line-height: 1.2; color: #1e293b; white-space: pre-wrap; word-break: break-word; }
+    .inv-footer { border-top: 2px solid #f1f5f9; padding-top: 15px; display: flex; justify-content: space-between; align-items: flex-end; }
+
     @media print {
-      .sidebar, .mobile-nav { display: none !important; }
-      .preview-area { background: white; padding: 0; overflow: visible; display: block !important; }
-      .invoice-paper { box-shadow: none; transform: none !important; margin: 0; width: 100%; padding: 5mm 10mm; min-height: auto; }
-      .inv-body { font-size: 1.5rem; line-height: 1.1; }
+      .mobile-nav, .sidebar-content { display: none !important; }
+      body { overflow: visible; background: white; }
+      #preview-section { position: relative; transform: none; display: block; padding: 0; }
+      .invoice-paper { box-shadow: none; margin: 0; padding: 5mm; }
     }
   </style>
 </head>
 <body>
 
+  <div class="main-container">
+    <section class="tab-content" id="edit-section">
+      <div class="sidebar-content">
+        <div class="btn-grid">
+          <button class="action-btn btn-paste" onclick="doPaste()"><i class="fas fa-paste"></i>لصق</button>
+          <button class="action-btn btn-clear" onclick="clearInvoice()"><i class="fas fa-trash-alt"></i>مسح</button>
+          <button class="action-btn btn-main" onclick="issueAndPrint()"><i class="fas fa-print"></i> إصدار وطباعة الفاتورة</button>
+        </div>
+        <textarea id="txtIn" placeholder="اكتب أو الصق تفاصيل الفاتورة هنا..."></textarea>
+        <div style="font-size:0.8rem; color:#94a3b8; display: flex; justify-content: space-between; padding: 0 5px;">
+          <span>أمل حشيش للمفروشات</span>
+          <span>حروف: <span id="charCount">0</span></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-content" id="preview-section">
+      <div class="invoice-paper" id="paper">
+        <div class="inv-header">
+          <div>
+            <h1 style="color:var(--primary); font-size:1.6rem;">أمل حشيش للمفروشات</h1>
+            <p style="font-size:0.8rem;">01063185555 - 01063195555</p>
+          </div>
+          <img src="Amal hashish.png" style="width:70px; height:70px; object-fit:contain;" onerror="this.style.opacity='0'">
+        </div>
+
+        <div class="inv-meta">
+          <div style="text-align:center"><b>التاريخ</b><br><span id="date">--/--/----</span></div>
+          <div style="text-align:center"><b>رقم الفاتورة</b><br><span id="num">#----</span></div>
+        </div>
+
+        <div class="inv-body" id="bodyOut"></div>
+
+        <div class="inv-footer">
+          <div>
+            <p style="font-weight:900; color:var(--primary);">رمضان كريم</p>
+            <p style="font-size:0.8rem; color:#64748b;">كل عام وأنتم بخير</p>
+          </div>
+          <img src="https://quickchart.io/qr?text=AmalHashish&size=60" style="width:60px;">
+        </div>
+      </div>
+    </section>
+  </div>
+
   <nav class="mobile-nav">
-    <button class="nav-btn active" onclick="switchTab('edit')"><i class="fas fa-edit"></i><br>تعديل</button>
-    <button class="nav-btn" onclick="switchTab('preview')"><i class="fas fa-eye"></i><br>المعاينة</button>
+    <button class="nav-btn active" id="btn-edit" onclick="switchTab('edit')"><i class="fas fa-edit"></i><br>تعديل</button>
+    <button class="nav-btn" id="btn-preview" onclick="switchTab('preview')"><i class="fas fa-eye"></i><br>المعاينة</button>
   </nav>
-
-  <aside class="sidebar active-tab" id="sidebar">
-    <div class="sidebar-content">
-      <div class="header-box">
-        <h2>أمل حشيش للمفروشات</h2>
-      </div>
-
-      <div class="btn-grid">
-        <button class="action-btn btn-paste" onclick="doPaste()"><i class="fas fa-paste"></i>لصق</button>
-        <button class="action-btn btn-clear" onclick="clearInvoice()"><i class="fas fa-trash-alt"></i>مسح</button>
-        <button class="action-btn btn-main" onclick="issueAndPrint()"><i class="fas fa-print"></i> إصدار وطباعة</button>
-      </div>
-
-      <textarea id="txtIn" placeholder="أدخل البيانات..."></textarea>
-      <div style="margin-top:10px; font-size:0.8rem; color:#94a3b8; text-align: left;">
-        حروف: <span id="charCount">0</span>
-      </div>
-    </div>
-  </aside>
-
-  <main class="preview-area" id="previewArea">
-    <div class="invoice-paper" id="paper">
-      <div class="watermark">أمل حشيش للمفروشات</div>
-      
-      <div class="inv-header">
-        <div>
-          <h1 style="color:var(--primary); font-size:1.8rem;">أمل حشيش للمفروشات</h1>
-          <p style="font-size:0.8rem;">01063185555 - 01063195555</p>
-        </div>
-        <img src="Amal hashish.png" class="inv-logo" onerror="this.style.opacity='0'">
-      </div>
-
-      <div class="inv-meta">
-        <div class="meta-col"><b>التاريخ</b><span id="date">--/--/----</span></div>
-        <div class="meta-col"><b>رقم الفاتورة</b><span id="num">#----</span></div>
-      </div>
-
-      <div class="inv-body" id="bodyOut"></div>
-
-      <div class="inv-footer">
-        <div>
-          <p style="font-weight:900; color:var(--primary);">رمضان كريم</p>
-          <p style="font-size:0.8rem; color:#64748b;">كل عام وأنتم بخير</p>
-        </div>
-        <img src="https://quickchart.io/qr?text=AmalHashish&size=70" style="width:60px;">
-      </div>
-    </div>
-  </main>
 
   <script>
     const input = document.getElementById('txtIn');
@@ -158,10 +225,24 @@
     const dateEl = document.getElementById('date');
     const numEl = document.getElementById('num');
 
+    // تحديث المحتوى فورا
     input.addEventListener('input', () => {
       document.getElementById('charCount').innerText = input.value.length;
       output.innerText = input.value;
     });
+
+    function switchTab(tab) {
+      if(tab === 'preview') {
+        document.body.classList.add('show-preview');
+        document.getElementById('btn-preview').classList.add('active');
+        document.getElementById('btn-edit').classList.remove('active');
+        fitInvoice();
+      } else {
+        document.body.classList.remove('show-preview');
+        document.getElementById('btn-edit').classList.add('active');
+        document.getElementById('btn-preview').classList.remove('active');
+      }
+    }
 
     function issueAndPrint() {
       if (!input.value.trim()) return; 
@@ -173,45 +254,35 @@
       numEl.innerText = 'INV-' + String(count).padStart(4, '0');
       dateEl.innerText = new Date().toLocaleDateString('ar-EG');
 
-      if(window.innerWidth < 900) switchTab('preview');
+      switchTab('preview');
       setTimeout(() => { window.print(); }, 500);
     }
 
-    function switchTab(tab) {
-      document.getElementById('sidebar').style.display = (tab === 'edit') ? 'flex' : 'none';
-      document.getElementById('previewArea').style.display = (tab === 'preview') ? 'flex' : 'none';
-      document.querySelectorAll('.nav-btn').forEach((b, i) => b.classList.toggle('active', (tab === 'edit' && i===0) || (tab === 'preview' && i===1)));
-      if(tab === 'preview') fitInvoice();
-    }
-
-    function fitInvoice() {
-      if(window.innerWidth < 900) {
-        const paper = document.getElementById('paper');
-        const scale = (document.getElementById('previewArea').offsetWidth - 10) / 793; 
-        paper.style.transform = `scale(${scale})`;
-      }
-    }
-
-    // --- تعديل وظيفة اللصق بدون نوافذ إضافية ---
     async function doPaste() {
       try {
         const text = await navigator.clipboard.readText();
         input.value = text;
         input.dispatchEvent(new Event('input'));
-        input.focus(); // توجيه التركيز فوراً
       } catch(e) {
-        // في حال منع المتصفح الوصول المباشر للحافظة
         input.focus();
         document.execCommand('paste');
       }
     }
 
-    // --- تعديل وظيفة المسح لتكون فورية ---
     function clearInvoice() {
       input.value = ''; 
       input.dispatchEvent(new Event('input'));
       numEl.innerText = '#----';
-      dateEl.innerText = '--/--/----';
+    }
+
+    function fitInvoice() {
+      const paper = document.getElementById('paper');
+      const container = document.getElementById('preview-section');
+      const scale = (container.offsetWidth - 20) / 793; 
+      if(scale < 1) {
+        paper.style.transform = `scale(${scale})`;
+        paper.style.transformOrigin = 'top center';
+      }
     }
 
     window.addEventListener('resize', fitInvoice);
