@@ -31,196 +31,101 @@
     }
 
     /* --- الهيكل الرئيسي --- */
-    .sidebar {
-      width: 400px;
-      background: var(--surface);
-      border-left: 1px solid #e2e8f0;
-      display: flex;
-      flex-direction: column;
-      z-index: 20;
-    }
-
-    .preview-area {
-      flex: 1;
-      background: #cbd5e1;
-      overflow-y: auto;
-      display: flex;
-      justify-content: center;
-      padding: 40px 20px;
-    }
+    .sidebar { width: 400px; background: var(--surface); border-left: 1px solid #e2e8f0; display: flex; flex-direction: column; z-index: 20; }
+    .preview-area { flex: 1; background: #cbd5e1; overflow-y: auto; display: flex; justify-content: center; padding: 20px; }
 
     /* --- الموبايل Navigation --- */
-    .mobile-nav {
-      display: none;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: white;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-      z-index: 100;
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .nav-btn {
-      padding: 15px;
-      text-align: center;
-      border: none;
-      background: none;
-      font-family: inherit;
-      font-weight: bold;
-      color: #94a3b8;
-      cursor: pointer;
-    }
-
-    .nav-btn.active {
-      color: var(--primary);
-      border-top: 3px solid var(--primary);
-      background: #eff6ff;
-    }
+    .mobile-nav { display: none; position: fixed; bottom: 0; width: 100%; background: white; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 100; grid-template-columns: 1fr 1fr; }
+    .nav-btn { padding: 15px; text-align: center; border: none; background: none; font-family: inherit; font-weight: bold; color: #94a3b8; cursor: pointer; }
+    .nav-btn.active { color: var(--primary); border-top: 3px solid var(--primary); background: #eff6ff; }
 
     /* --- أزرار التحكم --- */
     .sidebar-content { padding: 20px; overflow-y: auto; flex: 1; }
-    
     .header-box { text-align: center; margin-bottom: 20px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 15px; }
     .header-box h2 { color: var(--primary); font-size: 1.5rem; }
-
-    .btn-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    button.action-btn {
-      padding: 12px 8px;
-      border-radius: 12px;
-      border: none;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      font-size: 0.9rem;
-      transition: all 0.2s;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    button.action-btn:active { transform: scale(0.95); }
-
+    .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    
+    button.action-btn { padding: 12px 8px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
     .btn-paste { background: #ecfdf5; color: var(--success); border: 1px solid #bbf7d0; }
     .btn-clear { background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; }
-    
-    /* الزر المدمج (إصدار وطباعة) */
-    .btn-main { 
-      background: var(--primary); 
-      color: white; 
-      grid-column: span 2; 
-      flex-direction: row !important; 
-      font-size: 1.1rem; 
-      height: 55px;
-      box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
-    }
-    .btn-main i { font-size: 1.3rem; }
+    .btn-main { background: var(--primary); color: white; grid-column: span 2; flex-direction: row !important; font-size: 1.1rem; height: 55px; box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2); }
 
-    textarea {
-      width: 100%;
-      height: calc(100vh - 350px);
-      padding: 15px;
-      border: 2px solid #e2e8f0;
-      border-radius: 12px;
-      font-family: inherit;
-      font-size: 17px;
-      resize: none;
-      outline: none;
-      background: #fdfdfd;
-      line-height: 1.6;
-    }
+    textarea { width: 100%; height: calc(100vh - 350px); padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 16px; resize: none; outline: none; background: #fdfdfd; line-height: 1.4; }
 
-    /* --- تصميم ورقة الفاتورة --- */
+    /* --- تصميم ورقة الفاتورة (حل مشكلة المسافات) --- */
     .invoice-paper {
       background: #fff;
       width: 210mm;
       min-height: 297mm;
-      padding: 15mm;
+      padding: 12mm 15mm;
       position: relative;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       transform-origin: top center;
+      display: flex;
+      flex-direction: column;
     }
 
-    .watermark {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg);
-      font-size: 5rem; opacity: 0.05; font-weight: 900; white-space: nowrap; pointer-events: none;
-    }
-
-    .inv-header { display: flex; justify-content: space-between; border-bottom: 4px solid var(--primary); padding-bottom: 15px; margin-bottom: 25px; }
-    .inv-logo { width: 110px; height: 110px; object-fit: contain; }
+    .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 5rem; opacity: 0.05; font-weight: 900; white-space: nowrap; pointer-events: none; }
+    .inv-header { display: flex; justify-content: space-between; border-bottom: 3px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; }
+    .inv-logo { width: 90px; height: 90px; object-fit: contain; }
     
-    .inv-meta { display: flex; justify-content: space-around; background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #e2e8f0; }
+    .inv-meta { display: flex; justify-content: space-around; background: #f8fafc; padding: 10px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
     .meta-col { text-align: center; }
-    .meta-col b { display: block; color: #64748b; font-size: 0.9rem; margin-bottom: 5px; }
-    .meta-col span { font-size: 1.3rem; font-weight: 900; color: var(--primary); }
+    .meta-col b { display: block; color: #64748b; font-size: 0.8rem; }
+    .meta-col span { font-size: 1.1rem; font-weight: 900; color: var(--primary); }
 
-    .inv-body { min-height: 450px; font-size: 1.4rem; line-height: 1.9; color: #334155; }
-    .line-item { border-bottom: 1px dotted #e2e8f0; padding: 10px 0; }
+    /* تعديل جسم الفاتورة لضغط السطور وتكبير الخط */
+    .inv-body { 
+      flex: 1; 
+      font-size: 1.6rem; /* تكبير الخط */
+      line-height: 1.2;  /* تقليل المسافة بين السطور */
+      color: #1e293b;
+      white-space: pre-wrap; /* للحفاظ على تنسيق المسافات التي تكتبها يدويًا */
+    }
 
-    .inv-footer { border-top: 2px solid #f1f5f9; padding-top: 25px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .inv-footer { border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px; display: flex; justify-content: space-between; align-items: flex-end; }
 
-    /* --- التجاوب مع الموبايل --- */
     @media (max-width: 900px) {
       body { flex-direction: column; }
       .sidebar { width: 100%; height: calc(100vh - 65px); display: none; }
       .sidebar.active-tab { display: flex; }
-      .preview-area { padding: 10px; height: calc(100vh - 65px); display: none; }
+      .preview-area { padding: 5px; height: calc(100vh - 65px); display: none; }
       .preview-area.active-tab { display: flex; }
       .mobile-nav { display: grid; }
-      .invoice-paper { width: 100%; transform: scale(1); }
-      textarea { height: 350px; }
+      .invoice-paper { width: 100%; padding: 8mm; }
+      textarea { height: 300px; }
     }
 
     @media print {
       .sidebar, .mobile-nav { display: none !important; }
       .preview-area { background: white; padding: 0; overflow: visible; display: block !important; }
-      .invoice-paper { box-shadow: none; transform: none !important; margin: 0; width: 100%; padding: 10mm; }
+      .invoice-paper { box-shadow: none; transform: none !important; margin: 0; width: 100%; padding: 5mm 10mm; min-height: auto; }
+      .inv-body { font-size: 1.5rem; line-height: 1.1; } /* تحسين إضافي للطباعة */
     }
   </style>
 </head>
 <body>
 
   <nav class="mobile-nav">
-    <button class="nav-btn active" onclick="switchTab('edit')">
-      <i class="fas fa-edit"></i><br>تعديل
-    </button>
-    <button class="nav-btn" onclick="switchTab('preview')">
-      <i class="fas fa-eye"></i><br>المعاينة
-    </button>
+    <button class="nav-btn active" onclick="switchTab('edit')"><i class="fas fa-edit"></i><br>تعديل</button>
+    <button class="nav-btn" onclick="switchTab('preview')"><i class="fas fa-eye"></i><br>المعاينة</button>
   </nav>
 
   <aside class="sidebar active-tab" id="sidebar">
     <div class="sidebar-content">
       <div class="header-box">
         <h2>أمل حشيش للمفروشات</h2>
-        <p>نظام الفواتير الذكي</p>
       </div>
 
       <div class="btn-grid">
-        <button class="action-btn btn-paste" onclick="doPaste()">
-          <i class="fas fa-paste"></i>لصق نص
-        </button>
-        <button class="action-btn btn-clear" onclick="clearInvoice()">
-          <i class="fas fa-trash-alt"></i>مسح
-        </button>
-        <button class="action-btn btn-main" onclick="issueAndPrint()">
-          <i class="fas fa-print"></i>
-          إصدار وطباعة الفاتورة
-        </button>
+        <button class="action-btn btn-paste" onclick="doPaste()"><i class="fas fa-paste"></i>لصق</button>
+        <button class="action-btn btn-clear" onclick="clearInvoice()"><i class="fas fa-trash-alt"></i>مسح</button>
+        <button class="action-btn btn-main" onclick="issueAndPrint()"><i class="fas fa-print"></i> إصدار وطباعة</button>
       </div>
 
-      <textarea id="txtIn" placeholder="أدخل محتويات الفاتورة هنا..."></textarea>
-      <div style="margin-top:10px; font-size:0.85rem; color:#94a3b8; display:flex; justify-content:space-between;">
-        <span>أمل حشيش للمفروشات © 2026</span>
-        <span>حروف: <span id="charCount">0</span></span>
+      <textarea id="txtIn" placeholder="أدخل البيانات..."></textarea>
+      <div style="margin-top:10px; font-size:0.8rem; color:#94a3b8; text-align: left;">
+        حروف: <span id="charCount">0</span>
       </div>
     </div>
   </aside>
@@ -231,39 +136,25 @@
       
       <div class="inv-header">
         <div>
-          <h1 style="color:var(--primary); font-size:2rem; margin-bottom:5px;">أمل حشيش للمفروشات</h1>
-          <p><i class="fas fa-phone"></i> 01063185555 - 01063195555</p>
-          <p><i class="fas fa-map-marker-alt"></i> القاهرة، مصر</p>
+          <h1 style="color:var(--primary); font-size:1.8rem;">أمل حشيش للمفروشات</h1>
+          <p style="font-size:0.8rem;">01063185555 - 01063195555</p>
         </div>
         <img src="Amal hashish.png" class="inv-logo" onerror="this.style.opacity='0'">
       </div>
 
       <div class="inv-meta">
-        <div class="meta-col">
-          <b>التاريخ</b>
-          <span id="date">--/--/----</span>
-        </div>
-        <div class="meta-col">
-          <b>رقم الفاتورة</b>
-          <span id="num">#----</span>
-        </div>
+        <div class="meta-col"><b>التاريخ</b><span id="date">--/--/----</span></div>
+        <div class="meta-col"><b>رقم الفاتورة</b><span id="num">#----</span></div>
       </div>
 
-      <div class="inv-body" id="bodyOut">
-        <div style="color:#cbd5e1; text-align:center; margin-top:100px; border:2px dashed #f1f5f9; padding:20px;">
-          اكتب الأصناف في جهة التعديل لتظهر هنا
-        </div>
-      </div>
+      <div class="inv-body" id="bodyOut"></div>
 
       <div class="inv-footer">
         <div>
-          <p style="font-weight:900; color:var(--primary); font-size:1.2rem; margin-bottom:5px;">رمضان كريم</p>
-          <p style="color:#64748b;">كل عام وأنتم بخير - نشكركم لزيارتكم</p>
+          <p style="font-weight:900; color:var(--primary);">رمضان كريم</p>
+          <p style="font-size:0.8rem; color:#64748b;">كل عام وأنتم بخير</p>
         </div>
-        <div style="text-align:center;">
-          <img src="https://quickchart.io/qr?text=AmalHashish&size=90" style="width:80px; border:1px solid #e2e8f0; padding:5px; border-radius:8px;">
-          <p style="font-size:0.7rem; color:#94a3b8; margin-top:5px;">مسح للفيسبوك</p>
-        </div>
+        <img src="https://quickchart.io/qr?text=AmalHashish&size=70" style="width:60px;">
       </div>
     </div>
   </main>
@@ -273,94 +164,52 @@
     const output = document.getElementById('bodyOut');
     const dateEl = document.getElementById('date');
     const numEl = document.getElementById('num');
-    const charCount = document.getElementById('charCount');
 
-    // وظيفة الإصدار والطباعة المدمجة
+    // تحديث المحتوى مع الحفاظ على النص الخام لتقليل الفراغات
+    input.addEventListener('input', () => {
+      document.getElementById('charCount').innerText = input.value.length;
+      output.innerText = input.value; // استخدام innerText بدلاً من HTML لضغط السطور
+    });
+
     function issueAndPrint() {
-      if (!input.value.trim()) {
-        alert('برجاء إدخال بيانات في الفاتورة أولاً!');
-        return;
-      }
-
-      // 1. إصدار الرقم والتاريخ
+      if (!input.value.trim()) return alert('أدخل بيانات أولاً');
+      
       let count = parseInt(localStorage.getItem('inv_count')) || 0;
       count++;
       localStorage.setItem('inv_count', count);
       
       numEl.innerText = 'INV-' + String(count).padStart(4, '0');
-      dateEl.innerText = new Date().toLocaleDateString('ar-EG', {
-        year: 'numeric', month: 'long', day: 'numeric'
-      });
+      dateEl.innerText = new Date().toLocaleDateString('ar-EG');
 
-      // 2. التبديل للمعاينة لرؤية النتيجة قبل الطباعة (اختياري لكن مفضل للموبايل)
       if(window.innerWidth < 900) switchTab('preview');
-
-      // 3. الطباعة بعد تأخير بسيط للتأكد من تحديث الواجهة
-      setTimeout(() => {
-        window.print();
-      }, 500);
+      setTimeout(() => { window.print(); }, 500);
     }
 
     function switchTab(tab) {
-      const sidebar = document.getElementById('sidebar');
-      const preview = document.getElementById('previewArea');
-      const btns = document.querySelectorAll('.nav-btn');
-
-      if(tab === 'edit') {
-        sidebar.classList.add('active-tab');
-        preview.classList.remove('active-tab');
-        btns[0].classList.add('active');
-        btns[1].classList.remove('active');
-      } else {
-        sidebar.classList.remove('active-tab');
-        preview.classList.add('active-tab');
-        btns[1].classList.add('active');
-        btns[0].classList.remove('active');
-        fitInvoice();
-      }
+      document.getElementById('sidebar').style.display = (tab === 'edit') ? 'flex' : 'none';
+      document.getElementById('previewArea').style.display = (tab === 'preview') ? 'flex' : 'none';
+      document.querySelectorAll('.nav-btn').forEach((b, i) => b.classList.toggle('active', (tab === 'edit' && i===0) || (tab === 'preview' && i===1)));
+      if(tab === 'preview') fitInvoice();
     }
 
     function fitInvoice() {
       if(window.innerWidth < 900) {
         const paper = document.getElementById('paper');
-        const containerWidth = document.getElementById('previewArea').offsetWidth - 20;
-        const scale = containerWidth / 793; 
+        const scale = (document.getElementById('previewArea').offsetWidth - 10) / 793; 
         paper.style.transform = `scale(${scale})`;
       }
     }
 
-    input.addEventListener('input', () => {
-      const text = input.value;
-      charCount.innerText = text.length;
-      if(!text.trim()) {
-        output.innerHTML = '<div style="color:#cbd5e1; text-align:center; margin-top:100px; border:2px dashed #f1f5f9; padding:20px;">اكتب الأصناف في جهة التعديل لتظهر هنا</div>';
-        return;
-      }
-      const lines = text.split('\n');
-      output.innerHTML = lines.map(line => line.trim() ? `<div class="line-item">${line}</div>` : '').join('');
-    });
-
     async function doPaste() {
-      try {
-        const text = await navigator.clipboard.readText();
-        input.value = text;
-        input.dispatchEvent(new Event('input'));
-      } catch(e) {
-        alert('برجاء لصق النص يدوياً داخل المربع');
-      }
+      input.value = await navigator.clipboard.readText();
+      input.dispatchEvent(new Event('input'));
     }
 
     function clearInvoice() {
-      if(confirm('سيتم مسح البيانات الحالية ورقم الفاتورة، هل أنت متأكد؟')) {
-        input.value = '';
-        input.dispatchEvent(new Event('input'));
-        numEl.innerText = '#----';
-        dateEl.innerText = '--/--/----';
-      }
+      if(confirm('مسح؟')) { input.value = ''; input.dispatchEvent(new Event('input')); }
     }
 
     window.addEventListener('resize', fitInvoice);
-    // تعيين التاريخ الأولي
     dateEl.innerText = new Date().toLocaleDateString('ar-EG');
   </script>
 </body>
