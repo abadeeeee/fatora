@@ -10,12 +10,10 @@
   <style>
     :root {
       --primary: #1e3a8a;
-      --primary-light: #3b82f6;
       --bg: #f1f5f9;
       --surface: #ffffff;
       --danger: #ef4444;
       --success: #10b981;
-      --text-main: #1e293b;
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
@@ -23,52 +21,45 @@
     body {
       font-family: 'Tajawal', sans-serif;
       background: var(--bg);
-      color: var(--text-main);
       height: 100vh;
       display: flex;
-      overflow: hidden; /* منع اهتزاز الشاشة الرئيسية */
+      overflow: hidden; 
     }
 
-    /* --- Sidebar (صفحة التعديل) مع شريط تمرير --- */
+    /* تحسين صفحة التعديل وجعلها قابلة للتمرير بسلاسة */
     .sidebar { 
       width: 400px; 
       background: var(--surface); 
       border-left: 1px solid #e2e8f0; 
       display: flex; 
       flex-direction: column; 
-      z-index: 20; 
-      overflow-y: auto; /* تفعيل السكرول هنا */
-      scrollbar-width: thin; /* للمتصفحات الحديثة */
-      scrollbar-color: var(--primary-light) #f1f1f1;
+      overflow-y: auto; /* تفعيل الرول */
+      -webkit-overflow-scrolling: touch; /* سكرول ناعم للايفون */
     }
 
-    /* تحسين شكل الـ Scrollbar لمتصفحات كروم وسفاري */
-    .sidebar::-webkit-scrollbar { width: 6px; }
-    .sidebar::-webkit-scrollbar-track { background: #f1f1f1; }
+    /* تصميم السكرول بار (الرول) */
+    .sidebar::-webkit-scrollbar { width: 5px; }
     .sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-    .sidebar::-webkit-scrollbar-thumb:hover { background: var(--primary-light); }
 
-    .preview-area { flex: 1; background: #cbd5e1; overflow-y: auto; display: flex; justify-content: center; padding: 20px; transition: all 0.3s; }
+    .preview-area { flex: 1; background: #cbd5e1; overflow-y: auto; display: flex; justify-content: center; padding: 20px; }
 
-    /* --- الموبايل Navigation --- */
-    .mobile-nav { display: none; position: fixed; bottom: 0; width: 100%; background: white; box-shadow: 0 -2px 15px rgba(0,0,0,0.1); z-index: 100; grid-template-columns: 1fr 1fr; border-top: 1px solid #eee; }
-    .nav-btn { padding: 12px; text-align: center; border: none; background: none; font-family: inherit; font-weight: bold; color: #94a3b8; cursor: pointer; }
+    .mobile-nav { display: none; position: fixed; bottom: 0; width: 100%; background: white; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 100; grid-template-columns: 1fr 1fr; }
+    .nav-btn { padding: 12px; text-align: center; border: none; background: none; font-family: inherit; font-weight: bold; color: #94a3b8; }
     .nav-btn.active { color: var(--primary); background: #eff6ff; border-top: 3px solid var(--primary); }
 
-    .sidebar-content { padding: 20px; min-height: min-content; }
-    .header-box { text-align: center; margin-bottom: 20px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 15px; }
-    .header-box h2 { color: var(--primary); font-size: 1.4rem; }
+    .sidebar-content { padding: 20px; padding-bottom: 80px; } /* مسافة عشان الزراير ميتغطاش عليها */
+    .header-box { text-align: center; margin-bottom: 20px; }
     
-    .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
     
-    button.action-btn { padding: 12px 8px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; transition: background 0.2s; }
-    .btn-paste { background: #ecfdf5; color: var(--success); border: 1px solid #bbf7d0; }
-    .btn-clear { background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; }
-    .btn-main { background: var(--primary); color: white; grid-column: span 2; flex-direction: row !important; font-size: 1.1rem; height: 55px; box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2); }
+    button.action-btn { padding: 12px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 0.9rem; }
+    .btn-paste { background: #ecfdf5; color: var(--success); }
+    .btn-clear { background: #fef2f2; color: var(--danger); }
+    .btn-main { background: var(--primary); color: white; grid-column: span 2; flex-direction: row !important; height: 50px; font-size: 1.1rem; }
 
     textarea { 
       width: 100%; 
-      min-height: 400px; /* طول ثابت ومناسب للرؤية */
+      min-height: 350px; 
       padding: 15px; 
       border: 2px solid #e2e8f0; 
       border-radius: 12px; 
@@ -76,39 +67,27 @@
       font-size: 16px; 
       resize: none; 
       outline: none; 
-      background: #fdfdfd; 
       line-height: 1.6;
-      margin-bottom: 20px;
     }
 
-    /* --- تصميم ورقة الفاتورة --- */
-    .invoice-paper {
-      background: #fff; width: 210mm; min-height: 280mm; padding: 15mm; position: relative; display: flex; flex-direction: column;
-    }
-    .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 5rem; opacity: 0.04; font-weight: 900; pointer-events: none; width: 100%; text-align: center; }
-    .inv-header { display: flex; justify-content: space-between; border-bottom: 4px solid var(--primary); padding-bottom: 15px; margin-bottom: 20px; align-items: center; }
-    .inv-logo { width: 80px; height: 80px; object-fit: contain; }
-    .inv-meta { display: flex; justify-content: space-around; background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 25px; border: 1px solid #e2e8f0; }
-    .meta-col { text-align: center; }
-    .meta-col b { display: block; color: #64748b; font-size: 0.85rem; }
-    .meta-col span { font-size: 1.1rem; font-weight: 800; color: var(--primary); }
-    .inv-body { flex: 1; font-size: 1.4rem; line-height: 1.5; color: #1e293b; white-space: pre-wrap; word-wrap: break-word; }
-    .inv-footer { border-top: 2px solid #f1f5f9; padding-top: 20px; margin-top: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
+    /* الفاتورة */
+    .invoice-paper { background: #fff; width: 210mm; padding: 15mm; position: relative; display: flex; flex-direction: column; min-height: 290mm; }
+    .inv-header { display: flex; justify-content: space-between; border-bottom: 4px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; }
+    .inv-meta { display: flex; justify-content: space-around; background: #f8fafc; padding: 10px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
+    .inv-body { flex: 1; font-size: 1.4rem; white-space: pre-wrap; word-wrap: break-word; }
 
     @media (max-width: 900px) {
-      body { flex-direction: column; }
-      .sidebar { width: 100%; height: calc(100vh - 70px); }
-      .preview-area { width: 100%; height: calc(100vh - 70px); padding: 10px; }
-      .invoice-paper { width: 100%; padding: 10mm; }
+      .sidebar { width: 100%; height: calc(100vh - 60px); position: absolute; }
+      .preview-area { width: 100%; height: calc(100vh - 60px); position: absolute; padding: 10px; }
       .sidebar.hidden, .preview-area.hidden { display: none; }
       .mobile-nav { display: grid; }
-      textarea { min-height: 300px; }
+      .invoice-paper { width: 100%; padding: 8mm; }
     }
 
     @media print {
       .sidebar, .mobile-nav { display: none !important; }
-      .preview-area { display: block !important; padding: 0; background: white; overflow: visible; position: static; }
-      .invoice-paper { width: 100%; box-shadow: none; padding: 10mm; border: none; }
+      .preview-area { display: block !important; background: white; padding: 0; position: static; }
+      .invoice-paper { width: 100%; box-shadow: none; padding: 10mm; }
     }
   </style>
 </head>
@@ -121,69 +100,54 @@
 
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-content">
-      <div class="header-box">
-        <h2>أمل حشيش للمفروشات</h2>
-      </div>
-
+      <div class="header-box"><h2>أمل حشيش للمفروشات</h2></div>
       <div class="btn-grid">
         <button class="action-btn btn-paste" onclick="doPaste()"><i class="fas fa-paste"></i>لصق</button>
         <button class="action-btn btn-clear" onclick="clearInvoice()"><i class="fas fa-trash-alt"></i>مسح</button>
         <button class="action-btn btn-main" onclick="issueAndPrint()"><i class="fas fa-print"></i> إصدار وطباعة</button>
       </div>
-
-      <textarea id="txtIn" placeholder="اكتب محتوى الفاتورة هنا..."></textarea>
-      
-      <div style="margin-top:10px; font-size:0.85rem; color:#64748b; padding-bottom: 50px;">
-        عدد الحروف: <span id="charCount">0</span>
-      </div>
+      <textarea id="txtIn" placeholder="اكتب البيانات هنا..."></textarea>
+      <div style="margin-top:10px; color:#64748b;">حروف: <span id="charCount">0</span></div>
     </div>
   </aside>
 
   <main class="preview-area hidden" id="previewArea">
     <div class="invoice-paper" id="paper">
-      <div class="watermark">أمل حشيش للمفروشات</div>
       <div class="inv-header">
-        <div>
-          <h1 style="color:var(--primary); font-size:1.6rem;">أمل حشيش للمفروشات</h1>
-          <p style="font-size:0.9rem; font-weight: bold;">01063185555 - 01063195555</p>
-        </div>
-        <img src="Amal hashish.png" class="inv-logo" onerror="this.style.display='none'">
+        <h1 style="color:var(--primary);">أمل حشيش للمفروشات</h1>
+        <p>01063185555</p>
       </div>
       <div class="inv-meta">
-        <div class="meta-col"><b>التاريخ</b><span id="date">--/--/----</span></div>
-        <div class="meta-col"><b>رقم الفاتورة</b><span id="num">#----</span></div>
+        <div><b>التاريخ:</b> <span id="date">--</span></div>
+        <div><b>رقم الفاتورة:</b> <span id="num">--</span></div>
       </div>
       <div class="inv-body" id="bodyOut"></div>
-      <div class="inv-footer">
-        <div>
-          <p style="font-weight:900; color:var(--primary); font-size: 1.2rem;">رمضان كريم</p>
-          <p style="font-size:0.9rem; color:#64748b;">كل عام وأنتم بخير</p>
-        </div>
-        <img src="https://quickchart.io/qr?text=AmalHashish&size=70" style="width:60px;">
-      </div>
     </div>
   </main>
 
   <script>
     const input = document.getElementById('txtIn');
     const output = document.getElementById('bodyOut');
-    const dateEl = document.getElementById('date');
-    const numEl = document.getElementById('num');
 
     input.addEventListener('input', () => {
       document.getElementById('charCount').innerText = input.value.length;
       output.innerText = input.value;
     });
 
+    // المسح الفوري بدون رسالة تأكيد
+    function clearInvoice() {
+      input.value = ''; 
+      output.innerText = '';
+      document.getElementById('charCount').innerText = '0';
+      input.focus();
+    }
+
     function issueAndPrint() {
       if (!input.value.trim()) return;
-      let count = parseInt(localStorage.getItem('inv_count')) || 0;
-      count++;
-      localStorage.setItem('inv_count', count);
-      numEl.innerText = 'INV-' + String(count).padStart(4, '0');
-      dateEl.innerText = new Date().toLocaleDateString('ar-EG');
+      document.getElementById('date').innerText = new Date().toLocaleDateString('ar-EG');
+      document.getElementById('num').innerText = Math.floor(Math.random() * 10000);
       if(window.innerWidth < 900) switchTab('preview');
-      setTimeout(() => { window.print(); }, 800);
+      setTimeout(() => { window.print(); }, 500);
     }
 
     function switchTab(tab) {
@@ -205,19 +169,8 @@
         const text = await navigator.clipboard.readText();
         input.value = text;
         input.dispatchEvent(new Event('input'));
-      } catch(e) {
-        input.focus();
-      }
+      } catch(e) { input.focus(); }
     }
-
-    function clearInvoice() {
-      if(confirm("مسح الكل؟")) {
-        input.value = ''; 
-        input.dispatchEvent(new Event('input'));
-      }
-    }
-
-    window.onload = () => { dateEl.innerText = new Date().toLocaleDateString('ar-EG'); };
   </script>
 </body>
 </html>
