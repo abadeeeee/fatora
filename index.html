@@ -52,7 +52,7 @@
 
     textarea { width: 100%; height: calc(100vh - 350px); padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 16px; resize: none; outline: none; background: #fdfdfd; line-height: 1.4; }
 
-    /* --- تصميم ورقة الفاتورة (حل مشكلة المسافات) --- */
+    /* --- تصميم ورقة الفاتورة --- */
     .invoice-paper {
       background: #fff;
       width: 210mm;
@@ -74,14 +74,7 @@
     .meta-col b { display: block; color: #64748b; font-size: 0.8rem; }
     .meta-col span { font-size: 1.1rem; font-weight: 900; color: var(--primary); }
 
-    /* تعديل جسم الفاتورة لضغط السطور وتكبير الخط */
-    .inv-body { 
-      flex: 1; 
-      font-size: 1.6rem; /* تكبير الخط */
-      line-height: 1.2;  /* تقليل المسافة بين السطور */
-      color: #1e293b;
-      white-space: pre-wrap; /* للحفاظ على تنسيق المسافات التي تكتبها يدويًا */
-    }
+    .inv-body { flex: 1; font-size: 1.6rem; line-height: 1.2; color: #1e293b; white-space: pre-wrap; }
 
     .inv-footer { border-top: 2px solid #f1f5f9; padding-top: 15px; margin-top: 10px; display: flex; justify-content: space-between; align-items: flex-end; }
 
@@ -100,7 +93,7 @@
       .sidebar, .mobile-nav { display: none !important; }
       .preview-area { background: white; padding: 0; overflow: visible; display: block !important; }
       .invoice-paper { box-shadow: none; transform: none !important; margin: 0; width: 100%; padding: 5mm 10mm; min-height: auto; }
-      .inv-body { font-size: 1.5rem; line-height: 1.1; } /* تحسين إضافي للطباعة */
+      .inv-body { font-size: 1.5rem; line-height: 1.1; }
     }
   </style>
 </head>
@@ -165,14 +158,13 @@
     const dateEl = document.getElementById('date');
     const numEl = document.getElementById('num');
 
-    // تحديث المحتوى مع الحفاظ على النص الخام لتقليل الفراغات
     input.addEventListener('input', () => {
       document.getElementById('charCount').innerText = input.value.length;
-      output.innerText = input.value; // استخدام innerText بدلاً من HTML لضغط السطور
+      output.innerText = input.value;
     });
 
     function issueAndPrint() {
-      if (!input.value.trim()) return alert('أدخل بيانات أولاً');
+      if (!input.value.trim()) return; 
       
       let count = parseInt(localStorage.getItem('inv_count')) || 0;
       count++;
@@ -200,13 +192,26 @@
       }
     }
 
+    // --- تعديل وظيفة اللصق بدون نوافذ إضافية ---
     async function doPaste() {
-      input.value = await navigator.clipboard.readText();
-      input.dispatchEvent(new Event('input'));
+      try {
+        const text = await navigator.clipboard.readText();
+        input.value = text;
+        input.dispatchEvent(new Event('input'));
+        input.focus(); // توجيه التركيز فوراً
+      } catch(e) {
+        // في حال منع المتصفح الوصول المباشر للحافظة
+        input.focus();
+        document.execCommand('paste');
+      }
     }
 
+    // --- تعديل وظيفة المسح لتكون فورية ---
     function clearInvoice() {
-      if(confirm('مسح؟')) { input.value = ''; input.dispatchEvent(new Event('input')); }
+      input.value = ''; 
+      input.dispatchEvent(new Event('input'));
+      numEl.innerText = '#----';
+      dateEl.innerText = '--/--/----';
     }
 
     window.addEventListener('resize', fitInvoice);
